@@ -28,8 +28,8 @@ function render(){
 const waLink = document.getElementById('waLink');
 const igLink = document.getElementById('igLink');
 const ttLink = document.getElementById('ttLink');
-waLink.href = 'https://wa.me/6281234567890';
-igLink.href = 'https://instagram.com/bechalof.id';
-ttLink.href = 'https://tiktok.com/@bechalof.id';
+waLink.href = 'https://wa.me/6287770084807';
+igLink.href = 'https://instagram.com/bechalofid';
+ttLink.href = 'https://tiktok.com/@bechalofid';
 
 render();
