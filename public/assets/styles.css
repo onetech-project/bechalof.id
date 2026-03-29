@@ -1,3 +1,4 @@
+html{scroll-behavior:smooth}
 :root{--bg:#fff6f2;--primary:#d87b6a;--accent:#ffcf99;--text:#2b2b2b}
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:var(--text)}
