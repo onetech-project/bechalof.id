@@ -10,31 +10,44 @@
     <!-- Netlify Identity Widget (handles invite acceptance & auth) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    <!-- Netlify CMS -->
-    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-
     <script>
-      // Initialize Netlify Identity and open signup flow if invite token present
+      // Initialize Netlify Identity early (before loading Netlify CMS)
       (function(){
-        if (window.netlifyIdentity) {
-          // init the widget
-          window.netlifyIdentity.init();
+        try {
+          if (window.netlifyIdentity) {
+            // Explicit API URL helps in some deploy setups
+            var apiUrl = window.location.origin + '/.netlify/identity';
+            window.netlifyIdentity.init({ APIUrl: apiUrl });
 
-          // If an invite token is present in the URL, open the signup flow
-          const params = new URLSearchParams(window.location.search);
-          if (params.has('invitation') || params.has('invite_token') || params.has('token')) {
-            // open signup so user can set password and accept invite
-            window.netlifyIdentity.open('signup');
+            // If an invite token is present in the URL, open the signup flow
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('invitation') || params.has('invite_token') || params.has('token')) {
+              window.netlifyIdentity.open('signup');
+            }
+
+            // On successful login, reload /admin so Netlify CMS picks up the session
+            window.netlifyIdentity.on('login', function() {
+              window.netlifyIdentity.close();
+              // small delay to ensure token is persisted
+              setTimeout(function(){
+                window.location.replace('/admin/');
+              }, 200);
+            });
+
+            // On logout, redirect to admin so user sees login prompt again
+            window.netlifyIdentity.on('logout', function() {
+              window.location.replace('/admin/');
+            });
           }
-
-          // Optional: when user logs in, redirect to /admin to load CMS fully
-          window.netlifyIdentity.on('login', function() {
-            document.location.href = '/admin/';
-          });
+        } catch (e) {
+          console.error('Identity init error', e);
         }
       })();
     </script>
 
-    <p>If you were invited, the signup modal should open automatically. If not, try visiting this page and clicking "Login" in the Netlify Identity modal.</p>
+    <!-- Load Netlify CMS after Identity is initialized -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+    <p>If you were invited, the signup modal should open automatically. If not, click Login and choose Netlify to sign in.</p>
   </body>
 </html>
