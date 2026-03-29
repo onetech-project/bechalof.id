@@ -19,7 +19,7 @@ set -euo pipefail
 # - It will create a Netlify site and trigger an initial deploy of the `public` folder.
 # - If Netlify GitHub app linking requires manual authorization, the script will still upload a deploy using the CLI.
 
-REPO_NAME="bechalof"
+REPO_NAME="bechalof.id"
 PUBLISH_DIR="public"
 BRANCH="master"
 
@@ -38,6 +38,27 @@ if [ -z "${GITHUB_TOKEN:-}" ] || [ -z "${NETLIFY_AUTH_TOKEN:-}" ]; then
   echo "ERROR: GITHUB_TOKEN and NETLIFY_AUTH_TOKEN must be set in .env"
   exit 1
 fi
+
+# helper: extract JSON fields without requiring jq (use jq if present, else python)
+json_get() {
+  local field="$1"
+  local data="$2"
+  if command -v jq >/dev/null 2>&1; then
+    echo "$data" | jq -r "$field"
+  else
+    # field expected like .clone_url or .id
+    python3 - <<PY
+import sys, json
+obj = json.load(sys.stdin)
+try:
+    # support simple dotted field like .clone_url
+    key = '${field}'.lstrip('.')
+    print(obj.get(key, ''))
+except Exception as e:
+    print('')
+PY
+  fi
+}
 
 # confirm user intention
 read -p "This script will create a GitHub repo (private) and a Netlify site and push your local repo. Continue? [y/N] " confirm
@@ -64,12 +85,24 @@ CREATE_RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
   -d "{\"name\":\"${REPO_NAME}\", \"private\": true, \"description\":\"Bechalof site\"}" \
   https://api.github.com/user/repos)
 
-CLONE_HTTPS=$(echo "$CREATE_RESP" | jq -r .clone_url)
+# Extract clone URL using jq or python fallback
+CLONE_HTTPS=""
+if command -v jq >/dev/null 2>&1; then
+  CLONE_HTTPS=$(echo "$CREATE_RESP" | jq -r .clone_url)
+else
+  CLONE_HTTPS=$(echo "$CREATE_RESP" | python3 -c "import sys,json; print(json.load(sys.stdin).get('clone_url',''))")
+fi
+
 if [ -z "$CLONE_HTTPS" ] || [ "$CLONE_HTTPS" = "null" ]; then
   echo "GitHub repo creation failed. Response:";
-  echo "$CREATE_RESP" | jq .
+  if command -v jq >/dev/null 2>&1; then
+    echo "$CREATE_RESP" | jq .
+  else
+    echo "$CREATE_RESP"
+  fi
   exit 1
 fi
+
 
 echo "Created repo: $CLONE_HTTPS"
 
@@ -100,19 +133,29 @@ if [ -z "$SITE_CREATE" ] || [ "$SITE_CREATE" = "null" ]; then
     https://api.netlify.com/api/v1/sites)
 fi
 
-SITE_ID=$(echo "$SITE_CREATE" | jq -r .id)
-DEPLOY_URL=$(echo "$SITE_CREATE" | jq -r .ssl_url // .url)
+# Extract SITE_ID and DEPLOY_URL
+if command -v jq >/dev/null 2>&1; then
+  SITE_ID=$(echo "$SITE_CREATE" | jq -r .id)
+  DEPLOY_URL=$(echo "$SITE_CREATE" | jq -r '.ssl_url // .url')
+else
+  SITE_ID=$(echo "$SITE_CREATE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('id',''))")
+  DEPLOY_URL=$(echo "$SITE_CREATE" | python3 -c "import sys,json; obj=json.load(sys.stdin); print(obj.get('ssl_url') or obj.get('url') or '')")
+fi
 
 if [ -z "$SITE_ID" ] || [ "$SITE_ID" = "null" ]; then
   echo "Netlify site creation failed. Response:";
-  echo "$SITE_CREATE" | jq .
+  if command -v jq >/dev/null 2>&1; then
+    echo "$SITE_CREATE" | jq .
+  else
+    echo "$SITE_CREATE"
+  fi
   exit 1
 fi
 
 echo "Netlify site created: $DEPLOY_URL (id: $SITE_ID)"
 
 # Link repo to Netlify site for continuous deploy
-OWNER=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/user | jq -r .login)
+OWNER=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/user | python3 -c "import sys,json; print(json.load(sys.stdin).get('login',''))")
 REPO_FULL="${OWNER}/${REPO_NAME}"
 
 echo "Linking Netlify site to GitHub repo ${REPO_FULL} for continuous deploy..."
