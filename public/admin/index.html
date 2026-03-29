@@ -11,12 +11,15 @@
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <script>
-      // Initialize Netlify Identity early (before loading Netlify CMS)
-      (function(){
+      // Prevent Netlify CMS auto-init; we'll initialize it after Identity is ready
+      window.CMS_MANUAL_INIT = true;
+
+      function initIdentityAndCMS() {
         try {
+          // Set APIUrl explicitly to the site's identity endpoint
+          const apiUrl = window.location.origin + '/.netlify/identity';
+
           if (window.netlifyIdentity) {
-            // Explicit API URL helps in some deploy setups
-            var apiUrl = window.location.origin + '/.netlify/identity';
             window.netlifyIdentity.init({ APIUrl: apiUrl });
 
             // If an invite token is present in the URL, open the signup flow
@@ -25,16 +28,33 @@
               window.netlifyIdentity.open('signup');
             }
 
-            // On successful login, reload /admin so Netlify CMS picks up the session
-            window.netlifyIdentity.on('login', function() {
-              window.netlifyIdentity.close();
-              // small delay to ensure token is persisted
-              setTimeout(function(){
-                window.location.replace('/admin/');
-              }, 200);
+            // When Identity is ready, initialize CMS if user already logged in
+            window.netlifyIdentity.on('init', function(user) {
+              if (user) {
+                // User already logged in -> initialize CMS
+                if (window.CMS) {
+                  window.CMS.init();
+                }
+              }
             });
 
-            // On logout, redirect to admin so user sees login prompt again
+            // On login, initialize CMS (or reload to ensure session saved)
+            window.netlifyIdentity.on('login', function(user) {
+              // close the modal
+              window.netlifyIdentity.close();
+              // Ensure CMS picks up the auth token; prefer to call CMS.init() if not yet inited
+              if (window.CMS && !window.CMS.initialized) {
+                try { window.CMS.init(); } catch(e) { console.warn('CMS init error', e); }
+              }
+              // If CMS already initialized but token missing, reload to refresh session
+              setTimeout(function(){
+                if (window.location.pathname.indexOf('/admin') === 0) {
+                  window.location.replace('/admin/');
+                }
+              }, 250);
+            });
+
+            // On logout, reload to show login modal again
             window.netlifyIdentity.on('logout', function() {
               window.location.replace('/admin/');
             });
@@ -42,12 +62,28 @@
         } catch (e) {
           console.error('Identity init error', e);
         }
-      })();
+      }
+
+      // Load CMS script dynamically after setting up identity handlers
+      function loadCMS() {
+        var s = document.createElement('script');
+        s.src = 'https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js';
+        s.onload = function() {
+          // If identity already initialized and user present, init CMS
+          if (window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
+            try { window.CMS.init(); } catch(e) { console.warn('CMS init after load', e); }
+          }
+        };
+        document.body.appendChild(s);
+      }
+
+      // Start
+      initIdentityAndCMS();
+      loadCMS();
     </script>
 
-    <!-- Load Netlify CMS after Identity is initialized -->
-    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-
     <p>If you were invited, the signup modal should open automatically. If not, click Login and choose Netlify to sign in.</p>
+
+    <p style="margin-top:18px;color:#666">Troubleshooting: if login via Google redirects back to the login screen, check browser console for requests to <code>/.netlify/identity</code> and ensure cookies are allowed. You may also need to accept the invite using the same browser (no private mode).</p>
   </body>
 </html>
