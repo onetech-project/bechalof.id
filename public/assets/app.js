@@ -11,7 +11,7 @@ const products = [
 
 function render(){
   productGrid.innerHTML = '';
-  products.forEach(p => {
+  products.forEach((p, i) => {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
@@ -21,6 +21,8 @@ function render(){
       <p style="margin-top:8px;font-weight:700">${p.price}</p>
     `;
     productGrid.appendChild(card);
+    // stagger reveal animation
+    setTimeout(() => card.classList.add('visible'), 80 * i);
   });
 }
 
@@ -38,5 +40,10 @@ const mapsQuery = encodeURIComponent('Jl. Melati No. 10, Jakarta Selatan');
 addrLink.href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 addrLink.target = '_blank';
 addrLink.rel = 'noopener';
+
+// reveal hero on load
+window.addEventListener('load', () => {
+  document.querySelector('.hero .container').classList.add('visible');
+});
 
 render();
