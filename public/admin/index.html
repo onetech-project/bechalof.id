@@ -14,6 +14,13 @@
       // Prevent Netlify CMS auto-init; we'll initialize it after Identity is ready
       window.CMS_MANUAL_INIT = true;
 
+      function parseParamsFromHash() {
+        // Example hash: #invite_token=... or #invitation=...
+        const hash = (window.location.hash || '').replace(/^#/, '');
+        if (!hash) return new URLSearchParams();
+        return new URLSearchParams(hash);
+      }
+
       function initIdentityAndCMS() {
         try {
           // Set APIUrl explicitly to the site's identity endpoint
@@ -22,26 +29,31 @@
           if (window.netlifyIdentity) {
             window.netlifyIdentity.init({ APIUrl: apiUrl });
 
-            // If an invite token is present in the URL, open the signup flow
-            const params = new URLSearchParams(window.location.search);
-            if (params.has('invitation') || params.has('invite_token') || params.has('token')) {
-              window.netlifyIdentity.open('signup');
+            // Check both query string and hash for invite token
+            const qs = new URLSearchParams(window.location.search);
+            const hs = parseParamsFromHash();
+            const hasInvite = qs.has('invitation') || qs.has('invite_token') || qs.has('token') || hs.has('invitation') || hs.has('invite_token') || hs.has('token');
+            if (hasInvite) {
+              // open signup so user can set password and accept invite
+              try { window.netlifyIdentity.open('signup'); } catch(e) { console.warn('identity open signup error', e); }
             }
 
             // When Identity is ready, initialize CMS if user already logged in
             window.netlifyIdentity.on('init', function(user) {
+              console.log('netlifyIdentity init, user=', user);
               if (user) {
                 // User already logged in -> initialize CMS
                 if (window.CMS) {
-                  window.CMS.init();
+                  try { window.CMS.init(); } catch(e){ console.warn('CMS init error on init', e); }
                 }
               }
             });
 
             // On login, initialize CMS (or reload to ensure session saved)
             window.netlifyIdentity.on('login', function(user) {
+              console.log('netlifyIdentity login, user=', user);
               // close the modal
-              window.netlifyIdentity.close();
+              try { window.netlifyIdentity.close(); } catch(e){}
               // Ensure CMS picks up the auth token; prefer to call CMS.init() if not yet inited
               if (window.CMS && !window.CMS.initialized) {
                 try { window.CMS.init(); } catch(e) { console.warn('CMS init error', e); }
@@ -56,8 +68,11 @@
 
             // On logout, reload to show login modal again
             window.netlifyIdentity.on('logout', function() {
+              console.log('netlifyIdentity logout');
               window.location.replace('/admin/');
             });
+          } else {
+            console.warn('netlifyIdentity not available');
           }
         } catch (e) {
           console.error('Identity init error', e);
@@ -69,6 +84,7 @@
         var s = document.createElement('script');
         s.src = 'https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js';
         s.onload = function() {
+          console.log('Netlify CMS loaded');
           // If identity already initialized and user present, init CMS
           if (window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
             try { window.CMS.init(); } catch(e) { console.warn('CMS init after load', e); }
@@ -80,6 +96,9 @@
       // Start
       initIdentityAndCMS();
       loadCMS();
+
+      // Debug helper: expose to console
+      window._bechalof_debug = { parseHash: parseParamsFromHash };
     </script>
 
     <p>If you were invited, the signup modal should open automatically. If not, click Login and choose Netlify to sign in.</p>
