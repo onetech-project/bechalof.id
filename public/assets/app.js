@@ -32,4 +32,11 @@ waLink.href = 'https://wa.me/6287770084807';
 igLink.href = 'https://instagram.com/bechalofid';
 ttLink.href = 'https://tiktok.com/@bechalofid';
 
+// Address link - opens Google Maps (placeholder address)
+const addrLink = document.getElementById('addrLink');
+const mapsQuery = encodeURIComponent('Jl. Melati No. 10, Jakarta Selatan');
+addrLink.href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+addrLink.target = '_blank';
+addrLink.rel = 'noopener';
+
 render();
