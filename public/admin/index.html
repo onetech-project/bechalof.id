@@ -3,8 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <title>Bechalof CMS</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>body{font-family:Inter,system-ui,Arial;padding:24px;background:#fff}</style>
   </head>
   <body>
+    <!-- Netlify Identity Widget (handles invite acceptance & auth) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Netlify CMS -->
     <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+    <script>
+      // Initialize Netlify Identity and open signup flow if invite token present
+      (function(){
+        if (window.netlifyIdentity) {
+          // init the widget
+          window.netlifyIdentity.init();
+
+          // If an invite token is present in the URL, open the signup flow
+          const params = new URLSearchParams(window.location.search);
+          if (params.has('invitation') || params.has('invite_token') || params.has('token')) {
+            // open signup so user can set password and accept invite
+            window.netlifyIdentity.open('signup');
+          }
+
+          // Optional: when user logs in, redirect to /admin to load CMS fully
+          window.netlifyIdentity.on('login', function() {
+            document.location.href = '/admin/';
+          });
+        }
+      })();
+    </script>
+
+    <p>If you were invited, the signup modal should open automatically. If not, try visiting this page and clicking "Login" in the Netlify Identity modal.</p>
   </body>
 </html>
