@@ -107,6 +107,10 @@ function injectUIHelpers(){
   fc.id = 'floatingCart'
   fc.innerHTML = `<div class="cart-icon">🛒</div><div class="floating-badge" id="floatingBadge">0</div>`
   fc.onclick = ()=>{ window.scrollTo({top:document.querySelector('.cart').offsetTop-20,behavior:'smooth'}) }
+  // ensure colors per design
+  fc.style.background = getComputedStyle(document.documentElement).getPropertyValue('--primary') || '#d87b6a'
+  const badge = fc.querySelector('.floating-badge')
+  if(badge){ badge.style.background = getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#ffcf99'; badge.style.color = getComputedStyle(document.documentElement).getPropertyValue('--primary') || '#d87b6a' }
   document.body.appendChild(fc)
 
   const modal = document.createElement('div')
