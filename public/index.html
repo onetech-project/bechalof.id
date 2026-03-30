@@ -1,62 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Bechalof - Homemade Pastry</title>
-  <link rel="stylesheet" href="/assets/styles.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Bechalof - Homemade Pastry</title>
+<link href="/assets/styles.css" rel="stylesheet"/>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <div class="brand">
-        <div class="logo">Bechalof</div>
-        <nav class="nav">
-          <a href="#products">Products</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>Fresh pastries, baked with love</h1>
-        <p>Order your favorite pastries for breakfast, gifts, and special events.</p>
-        <div class="cta">
-          <a href="#products" class="btn">See Menu</a>
-          <a href="#contact" class="btn btn-outline">Order via WhatsApp</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="products" class="products container">
-      <h2>Popular Pastries</h2>
-      <div id="categoryFilters" class="filters"></div>
-      <div id="productGrid" class="grid"></div>
-    </section>
-
-    <section id="about" class="about container">
-      <h2>About Bechalof</h2>
-      <p id="aboutText">Bechalof is a small family-run pastry business making artisanal pastries using quality ingredients. We bake daily and deliver fresh to your doorstep.</p>
-    </section>
-
-    <section id="contact" class="contact container">
-      <h2>Contact</h2>
-      <p>WhatsApp: <a id="waLink" href="#">+62xxxxxxxxxx</a></p>
-      <p>Instagram: <a id="igLink" href="#">@bechalof.id</a></p>
-      <p>TikTok: <a id="ttLink" href="#">@bechalof.id</a></p>
-      <p>Address: <a id="addrLink" href="#" target="_blank" rel="noopener">Jl. Melati No. 10, Jakarta Selatan</a></p>
-    </section>
-
-  </main>
-
-  <footer class="site-footer container">
-    <p>&copy; 2026 Bechalof</p>
-  </footer>
-
-  <script src="/assets/app.js"></script>
+<header class="site-header">
+<div class="container">
+<div class="brand">
+<div class="logo">Bechalof</div>
+<nav class="nav">
+<a href="#products">Products</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</div>
+</div>
+</header>
+<main>
+<section class="hero">
+<div class="container">
+<h1>Fresh pastries, baked with love</h1>
+<p>Order your favorite pastries for breakfast, gifts, and special events.</p>
+<div class="cta">
+<a class="btn" href="#products">See Menu</a>
+<a class="btn btn-outline" href="#contact">Order via WhatsApp</a>
+</div>
+</div>
+</section>
+<section class="products container" id="products">
+<h2>Popular Pastries</h2>
+<div class="filters" id="categoryFilters"></div>
+<div class="grid" id="productGrid"></div>
+</section><aside class="cart container" style="max-width:980px;margin:18px auto">
+<h3>Your cart</h3>
+<div id="cart"></div>
+<p><button id="clearCartBtn">Clear cart</button></p>
+</aside>
+<section class="about container" id="about">
+<h2>About Bechalof</h2>
+<p id="aboutText">Bechalof is a small family-run pastry business making artisanal pastries using quality ingredients. We bake daily and deliver fresh to your doorstep.</p>
+</section>
+<section class="contact container" id="contact">
+<h2>Contact</h2>
+<p>WhatsApp: <a href="#" id="waLink">+62xxxxxxxxxx</a></p>
+<p>Instagram: <a href="#" id="igLink">@bechalof.id</a></p>
+<p>TikTok: <a href="#" id="ttLink">@bechalof.id</a></p>
+<p>Address: <a href="#" id="addrLink" rel="noopener" target="_blank">Jl. Melati No. 10, Jakarta Selatan</a></p>
+</section>
+</main>
+<footer class="site-footer container">
+<p>© 2026 Bechalof</p>
+</footer>
+<script src="/assets/cart.js"></script><script src="/assets/app.js"></script>
 </body>
 </html>

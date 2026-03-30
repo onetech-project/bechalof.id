@@ -1,0 +1,16 @@
+[
+  { "id":1, "name":"Croissant Classic", "category":"Pastry", "price":"20000", "image_url":"https://images.unsplash.com/photo-1604917877938-0b6e2f5e0df3?auto=format&fit=crop&w=800&q=60", "description":"Buttery, flaky croissant made fresh daily." },
+  { "id":2, "name":"Chocolate Danish", "category":"Pastry", "price":"25000", "image_url":"https://images.unsplash.com/photo-1548365328-9b96b5b1f4e1?auto=format&fit=crop&w=800&q=60", "description":"Filled with rich chocolate and almond crumble." },
+  { "id":3, "name":"Matcha Roll", "category":"Pastry", "price":"22000", "image_url":"https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=60", "description":"Soft roll with matcha cream." },
+  { "id":4, "name":"Blueberry Tart", "category":"Pastry", "price":"28000", "image_url":"https://images.unsplash.com/photo-1563805042-7684f0b0d3a0?auto=format&fit=crop&w=800&q=60", "description":"Fresh blueberries with custard in crisp shell." },
+  { "id":5, "name":"Cinnamon Bun", "category":"Pastry", "price":"18000", "image_url":"https://images.unsplash.com/photo-1604908176820-8a3b6d0d8a9b?auto=format&fit=crop&w=800&q=60", "description":"Warm cinnamon filling with glaze." },
+  { "id":6, "name":"Lemon Tart", "category":"Pastry", "price":"26000", "image_url":"https://images.unsplash.com/photo-1547592180-3bdc2b3bdebb?auto=format&fit=crop&w=800&q=60", "description":"Tangy lemon curd with buttery crust." },
+  { "id":101, "name":"Choco Chip Cookie", "category":"Cookies", "price":"8000", "image_url":"https://images.unsplash.com/photo-1600180758890-4e1a15f4c9aa?auto=format&fit=crop&w=800&q=60", "description":"Chewy cookie loaded with chocolate chips." },
+  { "id":102, "name":"Oatmeal Raisin", "category":"Cookies", "price":"7000", "image_url":"https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?auto=format&fit=crop&w=800&q=60", "description":"Wholesome oats with plump raisins." },
+  { "id":201, "name":"Classic Brownie", "category":"Brownies", "price":"15000", "image_url":"https://images.unsplash.com/photo-1563805042-7684f0b0d3a0?auto=format&fit=crop&w=800&q=60", "description":"Dense fudgy brownie with crackly top." },
+  { "id":202, "name":"Walnut Brownie", "category":"Brownies", "price":"17000", "image_url":"https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=60", "description":"Brownie studded with crunchy walnuts." },
+  { "id":301, "name":"Quiche Lorraine", "category":"Savory", "price":"30000", "image_url":"https://images.unsplash.com/photo-1604908176820-8a3b6d0d8a9b?auto=format&fit=crop&w=800&q=60", "description":"Classic quiche with bacon and cheese." },
+  { "id":302, "name":"Cheese Twist", "category":"Savory", "price":"12000", "image_url":"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=60", "description":"Flaky twist with cheddar filling." },
+  { "id":401, "name":"Iced Latte", "category":"Drink", "price":"20000", "image_url":"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=60", "description":"Smooth espresso over chilled milk." },
+  { "id":402, "name":"Herbal Tea", "category":"Drink", "price":"12000", "image_url":"https://images.unsplash.com/photo-1504691342899-9a8d1a0b2dcf?auto=format&fit=crop&w=800&q=60", "description":"Relaxing blend of herbs." }
+]
