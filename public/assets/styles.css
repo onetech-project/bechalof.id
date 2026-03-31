@@ -62,11 +62,57 @@ h1, h2, h3 {
   transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
 }
 
+/* ── State: di atas hero (transparent / dark bg) → elemen terang ── */
+.site-header:not(.scrolled) .logo {
+  color: var(--cream);
+}
+.site-header:not(.scrolled) .logo span {
+  color: var(--gold-lt);
+}
+.site-header:not(.scrolled) nav.nav a {
+  color: rgba(250,247,242,.85);
+}
+.site-header:not(.scrolled) nav.nav a:hover {
+  color: var(--cream);
+}
+.site-header:not(.scrolled) .nav-order {
+  background: rgba(250,247,242,.15) !important;
+  color: var(--cream) !important;
+  border: 1px solid rgba(250,247,242,.3);
+  backdrop-filter: blur(8px);
+}
+.site-header:not(.scrolled) .nav-order:hover {
+  background: rgba(250,247,242,.25) !important;
+}
+
+/* ── State: scrolled → glassmorphism, elemen gelap ── */
 .site-header.scrolled {
   background: rgba(250,247,242,.88);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 1px 0 rgba(59,42,26,.08), var(--shadow-sm);
+}
+
+.site-header.scrolled .logo {
+  color: var(--brown);
+}
+.site-header.scrolled .logo span {
+  color: var(--gold);
+}
+.site-header.scrolled nav.nav a {
+  color: var(--brown-lt);
+}
+.site-header.scrolled nav.nav a:hover {
+  color: var(--brown);
+}
+.site-header.scrolled .nav-order {
+  background: var(--brown) !important;
+  color: var(--cream) !important;
+  border: none !important;
+  backdrop-filter: none !important;
+}
+.site-header.scrolled .nav-order:hover {
+  background: var(--brown-lt) !important;
 }
 
 .nav-inner {
@@ -80,12 +126,12 @@ h1, h2, h3 {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 22px;
   font-weight: 700;
-  color: var(--brown);
   letter-spacing: -.3px;
+  transition: color var(--transition);
 }
 
 .logo span {
-  color: var(--gold);
+  transition: color var(--transition);
 }
 
 nav.nav {
@@ -97,7 +143,6 @@ nav.nav {
 nav.nav a {
   font-size: 14px;
   font-weight: 500;
-  color: var(--brown-lt);
   letter-spacing: .3px;
   position: relative;
   padding-bottom: 2px;
@@ -115,20 +160,17 @@ nav.nav a::after {
   transition: width var(--transition);
 }
 
-nav.nav a:hover { color: var(--brown); }
 nav.nav a:hover::after { width: 100%; }
 
 .nav-order {
-  background: var(--brown);
-  color: var(--cream) !important;
   padding: 9px 20px;
   border-radius: 100px;
   font-weight: 600 !important;
-  transition: background var(--transition), transform var(--transition) !important;
+  transition: background var(--transition), transform var(--transition), border var(--transition) !important;
 }
 
 .nav-order::after { display: none !important; }
-.nav-order:hover { background: var(--brown-lt) !important; transform: translateY(-1px) !important; }
+.nav-order:hover { transform: translateY(-1px) !important; }
 
 /* ── Hero ── */
 .hero {
