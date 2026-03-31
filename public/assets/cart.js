@@ -92,4 +92,4 @@ function renderCart() {
   }))
 }
 
-window.addEventListener('load', () => { renderCart() })
+// Cart renders after products are loaded (triggered by app.js init)

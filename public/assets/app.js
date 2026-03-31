@@ -292,6 +292,9 @@ async function init() {
   injectUIHelpers()
   wireCartButtons()
   setupReveal()
+
+  // Re-render cart AFTER products loaded so item names resolve correctly
+  renderCart()
   toggleCartSection()
 }
 
