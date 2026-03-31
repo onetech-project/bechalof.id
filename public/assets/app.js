@@ -85,6 +85,35 @@ function renderFilters(categories) {
   })
 }
 
+// ── Burger / Mobile Drawer ──
+function setupBurger() {
+  const burger = document.getElementById('burgerBtn')
+  const drawer = document.getElementById('navDrawer')
+  const backdrop = document.getElementById('drawerBackdrop')
+  if (!burger || !drawer) return
+
+  function openDrawer() {
+    burger.classList.add('open')
+    drawer.classList.add('open')
+    document.body.style.overflow = 'hidden'
+  }
+
+  function closeDrawer() {
+    burger.classList.remove('open')
+    drawer.classList.remove('open')
+    document.body.style.overflow = ''
+  }
+
+  burger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer()
+  })
+
+  backdrop.addEventListener('click', closeDrawer)
+
+  // Close on any drawer link click
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer))
+}
+
 // ── Sticky navbar ──
 const header = document.getElementById('siteHeader')
 window.addEventListener('scroll', () => {
@@ -292,6 +321,7 @@ async function init() {
   injectUIHelpers()
   wireCartButtons()
   setupReveal()
+  setupBurger()
 
   // Re-render cart AFTER products loaded so item names resolve correctly
   renderCart()
