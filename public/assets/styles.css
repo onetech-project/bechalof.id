@@ -163,9 +163,13 @@ nav.nav a::after {
 nav.nav a:hover::after { width: 100%; }
 
 .nav-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 9px 20px;
   border-radius: 100px;
   font-weight: 600 !important;
+  line-height: 1;
   transition: background var(--transition), transform var(--transition), border var(--transition) !important;
 }
 
